@@ -13,6 +13,18 @@ def load_data():
     fear_greed = pd.read_csv("data/fear_greed_index.csv")
     trades = pd.read_csv("data/historical_data.csv")
 
+    # Check for required columns
+    required_columns_fear_greed = ['Date']
+    required_columns_trades = ['time']
+
+    for col in required_columns_fear_greed:
+        if col not in fear_greed.columns:
+            raise KeyError(f"Missing required column '{col}' in fear_greed_index.csv")
+
+    for col in required_columns_trades:
+        if col not in trades.columns:
+            raise KeyError(f"Missing required column '{col}' in historical_data.csv")
+
     fear_greed['Date'] = pd.to_datetime(fear_greed['Date']).dt.date
     trades['time'] = pd.to_datetime(trades['time'])
     trades['Date'] = trades['time'].dt.date
