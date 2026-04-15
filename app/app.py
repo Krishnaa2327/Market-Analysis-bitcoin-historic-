@@ -13,20 +13,29 @@ def load_data():
     fear_greed = pd.read_csv("data/fear_greed_index.csv")
     trades = pd.read_csv("data/historical_data.csv")
 
+    # Rename columns to match what the app expects
+    fear_greed.rename(columns={'date': 'Date', 'classification': 'Classification'}, inplace=True)
+    trades.rename(columns={
+        'Timestamp IST': 'time',
+        'Closed PnL': 'closedPnL',
+        'Size USD': 'size',
+        'Side': 'side'
+    }, inplace=True)
+
     # Check for required columns
-    required_columns_fear_greed = ['Date']
-    required_columns_trades = ['time']
+    required_columns_fear_greed = ['Date', 'Classification']
+    required_columns_trades = ['time', 'closedPnL', 'size', 'side']
 
     for col in required_columns_fear_greed:
         if col not in fear_greed.columns:
-            raise KeyError(f"Missing required column '{col}' in fear_greed_index.csv")
+            raise KeyError(f"Missing required column '{col}' in fear_greed_index.csv. Found: {list(fear_greed.columns)}")
 
     for col in required_columns_trades:
         if col not in trades.columns:
-            raise KeyError(f"Missing required column '{col}' in historical_data.csv")
+            raise KeyError(f"Missing required column '{col}' in historical_data.csv. Found: {list(trades.columns)}")
 
-    fear_greed['Date'] = pd.to_datetime(fear_greed['Date']).dt.date
-    trades['time'] = pd.to_datetime(trades['time'])
+    fear_greed['Date'] = pd.to_datetime(fear_greed['Date'], format='mixed', dayfirst=True).dt.date
+    trades['time'] = pd.to_datetime(trades['time'], format='mixed', dayfirst=True)
     trades['Date'] = trades['time'].dt.date
 
     merged = pd.merge(trades, fear_greed, on='Date', how='inner')
