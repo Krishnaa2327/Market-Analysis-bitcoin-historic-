@@ -51,19 +51,21 @@ To uncover patterns between market sentiment and:
 
 ### 1. Install dependencies
 
+```bash
 pip install -r requirements.txt
-
+```
 
 ### 2. Run Streamlit app
 
+```bash
 streamlit run app/app.py
-
+```
 
 ---
 
 ## Project Structure
 
-
+```text
 project/
 │
 ├── data/
@@ -78,6 +80,7 @@ project/
 │
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
